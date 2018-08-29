@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="sQLex2" Id="{f714f8bd-96c4-4151-a49a-208e192600bf}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM sQLex2
+VAR
+	bCONNECT					: BOOL;
+	bEXECUTE					: BOOL;
+	bWRITE						: BOOL;
+	bREAD 						: BOOL;
+	bUPDATE						: BOOL;
+	bDISCONNECT					: BOOL;
+	
+	
+	bConn						: BOOL;	
+	bResult						: BOOL;
+	bData						: BOOL;
+	bError						: BOOL;
+	
+	R_TRIG1						: R_TRIG;	
+	R_TRIG2						: R_TRIG;
+	R_TRIG3						: R_TRIG;
+	R_TRIG4						: R_TRIG;
+	R_TRIG5						: R_TRIG;
+	
+	nState						: INT;
+	nState_Connect				: INT;
+	nState_Disconnect			: INT;
+	nState_Read					: INT;
+	nState_Write				: INT;
+	
+	ipResultEvent : Tc3_Eventlogger.I_TcResultEvent;
+	sErrorClass : WSTRING(255);
+	sErrorMsg : WSTRING(255);
+	
+	nDBID						: UDINT := 1;
+	fbSqlDatabase 				: FB_SQLDatabase(sNetID := '', tTimeout := T#5S);
+	
+	fbConfigTcDBSrv   			: FB_ConfigTcDBSrv(sNetId := '', tTimeout:=T#5S);
+    aDBConfig         			: ARRAY[0..MAX_CONFIGURATIONS] OF ST_ConfigDB;
+    aAutoGrpConfig    			: ARRAY[0..MAX_CONFIGURATIONS] OF ST_ConfigAutoLogGrp;
+    nDbCount          			: UDINT;
+    nAutoGrpCount     			: UDINT;
+	
+	sCmd						: STRING(1000);
+	fbSqlCommand 				: FB_SQLCommand(sNetID := '', tTimeout := T#5S);
+	
+	fbSqlResult 				: FB_SQLResult(sNetID:='', tTimeout   := T#5S); 
+    aReadStruct 				: ARRAY[0..1] OF ST_Record;
+	nRecs						: UDINT;		
+	nRecordStartIndex			: UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[R_TRIG1(CLK:=bCONNECT);
+IF R_TRIG1.Q AND nState = 0 THEN
+	bCONNECT := FALSE;
+	nState := 1;
+END_IF	
+
+R_TRIG2(CLK:=bEXECUTE);
+IF R_TRIG2.Q AND nState = 0 THEN
+	bEXECUTE := FALSE;
+	nState := 2;
+END_IF
+
+R_TRIG2(CLK:=bWRITE);
+IF R_TRIG2.Q AND nState = 0 THEN
+	bWRITE := FALSE;
+	nState := 3;
+END_IF		
+
+R_TRIG3(CLK:=bREAD);
+IF R_TRIG3.Q AND nState = 0 THEN
+	bREAD := FALSE; 
+	nState := 4;
+END_IF
+
+R_TRIG4(CLK:=bDISCONNECT);
+IF R_TRIG4.Q THEN
+	bDISCONNECT := FALSE;
+	nState := 5;
+END_IF
+
+
+CASE nState OF
+	0:(*Idle*)
+	
+	1: // Connect to database and create stored procedure instance 
+		CASE nState_Connect OF
+			0:
+				IF fbSQLDatabase.Connect(hDBID:= nDBID) THEN
+					ipResultEvent := fbSQLDatabase.ipTcResultEvent;
+					bConn :=  fbSQLDatabase.bConnected;
+					IF bConn THEN
+						nState_Connect := 1;
+					ELSE
+						nState:=200;
+					END_IF
+				END_IF 
+				
+			1://Read Connected Server Information
+			
+				IF fbConfigTcDBSrv.Read(
+					pDBConfig := ADR(aDBConfig), 
+					cbDBConfig := SIZEOF(aDBConfig), 
+					pAutologGrpConfig := ADR(aAutoGrpConfig),
+					cbAutoLogGrpConfig := SIZEOF(aAutoGrpConfig),
+					pDBCount := ADR(nDbCount),
+					pAutoLogGrpCount := ADR(nAutoGrpCount))
+				 THEN
+				   	ipResultEvent := fbSQLResult.ipTcResultEvent;
+					nState := 200;
+					nState_Connect :=0;
+				END_IF
+				
+				
+				
+		END_CASE
+		
+
+				
+	3://///////////////////////////////////////////////////////////////////////////
+	
+		CASE  nState_Write OF
+			
+			 0:	// create a command reference
+				IF fbSqlDatabase.CreateCmd(ADR(fbSqlCommand)) THEN
+						ipResultEvent := fbSQLResult.ipTcResultEvent;
+						//nState := 200;
+						nState_Write:=1;
+				END_IF
+		
+			1:	// you can generate this with the SQL Query Editor 
+			sCmd := 'INSERT INTO MyTable_Struct ( ID,Timestamp, Name, Sensor1,Sensor2) VALUES ( 5, $'2018-01-31 14:59:27$', $'Temperature$', 21.3,22.5)';
+			// call sql command
+			IF fbSQLCommand.Execute(ADR(sCmd), SIZEOF(sCmd)) THEN
+						ipResultEvent := fbSQLResult.ipTcResultEvent;
+						nState := 200;
+						nState_Write:=0;
+			END_IF
+			
+		END_CASE
+		
+	4: // Auslesen Von SQL Server 
+		CASE nState_Read OF
+			
+		
+		0:// create a command reference
+			IF fbSqlDatabase.CreateCmd(ADR(fbSqlCommand)) THEN
+				
+						ipResultEvent := fbSQLResult.ipTcResultEvent;
+						//nState := 200;
+						nState_Read:=1;
+			END_IF
+	
+		1:// you can generate this with the SQL Query Editor 			
+			sCmd := 'SELECT ID, Timestamp, Name, Sensor1,Sensor2 FROM MyTable_Struct';
+			// call sql command
+			IF fbSQLCommand.ExecuteDataReturn(ADR(sCmd), SIZEOF(sCmd), ADR(fbSqlResult)) THEN
+				ipResultEvent := fbSQLResult.ipTcResultEvent;
+				//nState := 200;
+				nState_Read:=2;
+			END_IF
+		
+		2:// auslesen Dateien
+		// get values from internal tc db srv storage 
+		
+		IF fbSqlResult.Read(nRecordStartIndex, 2, ADR(aReadStruct), SIZEOF(aReadStruct), TRUE, TRUE) THEN
+			ipResultEvent := fbSQLResult.ipTcResultEvent;
+			nRecs := fbSQLResult.nDataCount;
+			nState_Read:=0;	
+			nState := 200;
+			
+		END_IF
+		
+	END_CASE
+	
+	5:// Disconnect all
+	CASE nState_Disconnect OF
+		0:
+			IF bData THEN
+				IF fbSQLResult.Release() THEN
+					nState_Disconnect := 1;
+				END_IF
+			ELSE
+				nState_Disconnect := 1;
+			END_IF
+
+		1:
+			IF bConn THEN
+				IF fbSQLDatabase.Disconnect() THEN
+					nState_Disconnect := 2;
+				END_IF
+			ELSE
+				nState_Disconnect := 2;
+			END_IF
+		2:
+			bData := FALSE;
+			bConn := FALSE;
+			bResult := FALSE;
+			sErrorClass := "";
+			sErrorMsg := "";
+			bError := FALSE;
+			nState_Disconnect := 0;
+			nState := 0;
+	END_CASE
+
+	200:
+		bError := ipResultEvent.Severity = E_Severity.Error;
+		sErrorClass := ipResultEvent.EventClassDisplayName;
+		sErrorMsg := ipResultEvent.Text;
+		nState := 0;	
+	
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="sQLex2">
+      <LineId Id="212" Count="10" />
+      <LineId Id="235" Count="4" />
+      <LineId Id="234" Count="0" />
+      <LineId Id="223" Count="10" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="29" Count="3" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="240" Count="0" />
+      <LineId Id="37" Count="10" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="257" Count="0" />
+      <LineId Id="244" Count="7" />
+      <LineId Id="256" Count="0" />
+      <LineId Id="260" Count="0" />
+      <LineId Id="284" Count="0" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="324" Count="0" />
+      <LineId Id="323" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="61" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="84" Count="1" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="330" Count="3" />
+      <LineId Id="113" Count="1" />
+      <LineId Id="101" Count="2" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="264" Count="1" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="262" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="354" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="266" Count="1" />
+      <LineId Id="164" Count="1" />
+      <LineId Id="271" Count="0" />
+      <LineId Id="269" Count="1" />
+      <LineId Id="170" Count="3" />
+      <LineId Id="348" Count="5" />
+      <LineId Id="163" Count="0" />
+      <LineId Id="274" Count="2" />
+      <LineId Id="281" Count="0" />
+      <LineId Id="277" Count="2" />
+      <LineId Id="283" Count="0" />
+      <LineId Id="322" Count="0" />
+      <LineId Id="355" Count="0" />
+      <LineId Id="268" Count="0" />
+      <LineId Id="282" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="321" Count="0" />
+      <LineId Id="285" Count="9" />
+      <LineId Id="302" Count="10" />
+      <LineId Id="314" Count="6" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="199" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="205" Count="2" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

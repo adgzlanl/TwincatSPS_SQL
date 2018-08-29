@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ServerSettings>
+  <TargetNetID>127.0.0.1.1.1</TargetNetID>
+  <LogMode>0</LogMode>
+  <LogPath />
+  <LogMaxLength>0</LogMaxLength>
+  <Impersonate>False</Impersonate>
+  <DBNULLAllowed>True</DBNULLAllowed>
+  <DBCommandTimeout>30</DBCommandTimeout>
+  <DBConnectionTimeout>15</DBConnectionTimeout>
+  <MaxByteArrayLength>256</MaxByteArrayLength>
+  <MaxStringLength>256</MaxStringLength>
+  <WSTRINGSupportActive>True</WSTRINGSupportActive>
+  <TcDbSrvProject>
+    <tcdbsrvdbCompile Include="SQLServer\TwincatSQL\TwincatSQL.tcdbsrvdb" />
+    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\AutoLogGroup\AutoLogGroup.tcdbsrvauto" />
+    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\AutoLogGroup\AdsDevice.tcdbsrvads" />
+    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\AutoLogGroup\Symbols.tcdbsrvsym" />
+    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\AutoLogGroup\DBTable.tcdbsrvtbl" />
+  </TcDbSrvProject>
+</ServerSettings>

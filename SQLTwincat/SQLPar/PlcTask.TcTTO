@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <Task Name="PlcTask" Id="{499d838f-94a5-4834-99fe-038a136022e2}">
+    <!--CycleTime in micro seconds.-->
+    <CycleTime>10000</CycleTime>
+    <Priority>20</Priority>
+    <PouCall>
+      <Name>sQLex2</Name>
+    </PouCall>
+    <TaskFBGuid>{89b1b9ec-5101-4166-9298-45c5e14afb4c}</TaskFBGuid>
+    <Fb_init>{babfa849-909f-4296-a8d7-d1bfe9228ad1}</Fb_init>
+    <Fb_exit>{a61757f6-c956-43a7-bcae-e30cec69170d}</Fb_exit>
+    <CycleUpdate>{421d1df7-b48c-497f-831b-71922b9c2176}</CycleUpdate>
+    <PostCycleUpdate>{9b80357e-e3ab-4ed9-a835-f2b9ddd8c54d}</PostCycleUpdate>
+  </Task>
+</TcPlcObject>

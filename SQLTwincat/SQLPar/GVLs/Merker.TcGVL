@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <GVL Name="Merker" Id="{4de0dba3-db52-482d-8e41-db9714b43ca4}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+
+	Par1 		:BOOL;
+	Par2		:INT;
+	Par3		:DINT;
+	Par4		:REAL;
+	Par5		:LREAL;	
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
