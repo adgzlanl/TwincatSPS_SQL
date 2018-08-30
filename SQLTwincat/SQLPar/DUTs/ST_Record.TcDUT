@@ -4,7 +4,6 @@
     <Declaration><![CDATA[TYPE ST_Record :
 STRUCT
     nID        : LINT;
-    dtTimestamp: DATE_AND_TIME;
     sName      : STRING;
     nSensor1   : REAL;
     nSensor2   : REAL;

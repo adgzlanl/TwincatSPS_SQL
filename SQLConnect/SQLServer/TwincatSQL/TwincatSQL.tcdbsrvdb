@@ -2,7 +2,7 @@
 <Database>
   <ID>1</ID>
   <Name>TwincatSQL</Name>
-  <ServerName>192.168.2.108</ServerName>
+  <ServerName>192.168.0.5</ServerName>
   <DatabaseName>TwincatSQL</DatabaseName>
   <TableName />
   <Authentication>True</Authentication>

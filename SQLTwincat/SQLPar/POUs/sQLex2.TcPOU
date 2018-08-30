@@ -13,7 +13,6 @@ VAR
 	
 	bConn						: BOOL;	
 	bResult						: BOOL;
-	bData						: BOOL;
 	bError						: BOOL;
 	
 	R_TRIG1						: R_TRIG;	
@@ -46,8 +45,15 @@ VAR
 	
 	fbSqlResult 				: FB_SQLResult(sNetID:='', tTimeout   := T#5S); 
     aReadStruct 				: ARRAY[0..1] OF ST_Record;
+	WriteStruct 				: ST_Record;
 	nRecs						: UDINT;		
 	nRecordStartIndex			: UDINT;
+	bData						: INT;
+	
+	systime 					: GETSYSTEMTIME;
+	currentTime 				: T_FILETIME;
+	
+	FB_FormatString1			:FB_FormatString;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -131,7 +137,22 @@ CASE nState OF
 				END_IF
 		
 			1:	// you can generate this with the SQL Query Editor 
-			sCmd := 'INSERT INTO MyTable_Struct ( ID,Timestamp, Name, Sensor1,Sensor2) VALUES ( 5, $'2018-01-31 14:59:27$', $'Temperature$', 21.3,22.5)';
+			WriteStruct.nID:=2;
+			WriteStruct.sName := 'MyStructVal2';
+			WriteStruct.nSensor1 := 16.384;
+			WriteStruct.nSensor2 := 192.655;
+			//sCmd := 'INSERT INTO MyTable_Struct ( ID,Timestamp, Name, Sensor1,Sensor2) VALUES ( 5, $'2018-01-31 14:59:27$', $'Temperature$', 21.3,22.5)';
+			FB_FormatString1(
+			sFormat:='INSERT INTO MyTable_Struct ( ID, Name, Sensor1,Sensor2) VALUES ( %d,$'%S$',%F,%F)',
+			arg1:= F_LINT(WriteStruct.nID),
+			arg2:= F_STRING(WriteStruct.sName),
+			arg3:= F_REAL(WriteStruct.nSensor1),
+			arg4:= F_REAL(WriteStruct.nSensor2),
+			sOut=> sCmd,
+			bError=> bError,
+			nErrId=> );
+			
+			
 			// call sql command
 			IF fbSQLCommand.Execute(ADR(sCmd), SIZEOF(sCmd)) THEN
 						ipResultEvent := fbSQLResult.ipTcResultEvent;
@@ -154,7 +175,7 @@ CASE nState OF
 			END_IF
 	
 		1:// you can generate this with the SQL Query Editor 			
-			sCmd := 'SELECT ID, Timestamp, Name, Sensor1,Sensor2 FROM MyTable_Struct';
+			sCmd := 'SELECT ID, Name, Sensor1,Sensor2 FROM MyTable_Struct';
 			// call sql command
 			IF fbSQLCommand.ExecuteDataReturn(ADR(sCmd), SIZEOF(sCmd), ADR(fbSqlResult)) THEN
 				ipResultEvent := fbSQLResult.ipTcResultEvent;
@@ -168,6 +189,7 @@ CASE nState OF
 		IF fbSqlResult.Read(nRecordStartIndex, 2, ADR(aReadStruct), SIZEOF(aReadStruct), TRUE, TRUE) THEN
 			ipResultEvent := fbSQLResult.ipTcResultEvent;
 			nRecs := fbSQLResult.nDataCount;
+			bData:=fbSQLResult.eVerifyResult;
 			nState_Read:=0;	
 			nState := 200;
 			
@@ -178,7 +200,7 @@ CASE nState OF
 	5:// Disconnect all
 	CASE nState_Disconnect OF
 		0:
-			IF bData THEN
+			IF bData=1 THEN
 				IF fbSQLResult.Release() THEN
 					nState_Disconnect := 1;
 				END_IF
@@ -195,7 +217,7 @@ CASE nState OF
 				nState_Disconnect := 2;
 			END_IF
 		2:
-			bData := FALSE;
+			bData := 0;
 			bConn := FALSE;
 			bResult := FALSE;
 			sErrorClass := "";
@@ -244,7 +266,15 @@ END_CASE]]></ST>
       <LineId Id="115" Count="0" />
       <LineId Id="330" Count="3" />
       <LineId Id="113" Count="1" />
-      <LineId Id="101" Count="2" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="478" Count="0" />
+      <LineId Id="460" Count="1" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="467" Count="2" />
+      <LineId Id="471" Count="4" />
+      <LineId Id="464" Count="2" />
+      <LineId Id="103" Count="0" />
       <LineId Id="105" Count="0" />
       <LineId Id="264" Count="1" />
       <LineId Id="110" Count="0" />
@@ -264,6 +294,7 @@ END_CASE]]></ST>
       <LineId Id="274" Count="2" />
       <LineId Id="281" Count="0" />
       <LineId Id="277" Count="2" />
+      <LineId Id="405" Count="0" />
       <LineId Id="283" Count="0" />
       <LineId Id="322" Count="0" />
       <LineId Id="355" Count="0" />

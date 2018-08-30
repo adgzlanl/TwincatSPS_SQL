@@ -4,11 +4,11 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
 
-	Par1 		:BOOL;
-	Par2		:INT;
-	Par3		:DINT;
-	Par4		:REAL;
-	Par5		:LREAL;	
+	Par1 		:BOOL:=TRUE;
+	Par2		:INT:=10;
+	Par3		:DINT:=100;
+	Par4		:REAL:=100.1;
+	Par5		:LREAL:=10.12;	
 
 END_VAR]]></Declaration>
   </GVL>

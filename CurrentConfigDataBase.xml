@@ -1,0 +1,121 @@
+<?xml version="1.0" standalone="yes"?>
+<Configuration xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CurrentConfigDataStores.xsd">
+	<Header>
+		<Configurator>TF6420 Database Configurator 3.0</Configurator>
+		<Timestamp>2018-08-30T12:53:11</Timestamp>
+		<FileVersion>2.1</FileVersion>
+		<TargetSystemNetID>127.0.0.1.1.1</TargetSystemNetID>
+	</Header>
+	<GlobalConfig>
+		<GCfg Name="LogMode">1</GCfg>
+		<GCfg Name="LogPath">C:\TwinCAT\Functions\TF6420-Database-Server\Win32\Server</GCfg>
+		<GCfg Name="MaxLogFileSize">10</GCfg>
+		<GCfg Name="Impersonate">0</GCfg>
+		<GCfg Name="DBNULLAllowed">True</GCfg>
+		<GCfg Name="DBConnectionTimeout">15</GCfg>
+		<GCfg Name="DBCommandTimeout">30</GCfg>
+		<GCfg Name="MaxByteArrayLength">256</GCfg>
+		<GCfg Name="MaxStringLength">256</GCfg>
+		<GCfg Name="WSTRINGSupportActive">True</GCfg>
+		<GCfg Name="PwdInfos">tZuYPxhe+G5NKHWLYSZE+NiFAINdlcBgtIUVD+KtAffYMzM0tUkS3WfY6FdgWM35CFTS1gZw230tAObr+O35I+aEAlOFW/r3</GCfg>
+	</GlobalConfig>
+	<BaseConfig>
+		<DataStores>
+			<Databases>
+				<Database Type="2" Name="TwincatSQL">
+					<DBId>1</DBId>
+					<DBServer>192.168.0.5</DBServer>
+					<DBProvider>SQLOLEDB</DBProvider>
+					<DBDatabase>TwincatSQL</DBDatabase>
+					<DBUserId>sa</DBUserId>
+				</Database>
+			</Databases>
+		</DataStores>
+		<Devices>
+			<AdsDevice DeviceName="ADSDevice">
+				<DeviceId>1</DeviceId>
+				<NetID>127.0.0.1.1.1</NetID>
+				<Port>851</Port>
+				<ADSReadWriteSetting>1</ADSReadWriteSetting>
+			</AdsDevice>
+		</Devices>
+		<AutoLogGroups>
+			<AutoLogGroup Name="EA">
+				<AutoLogGrpID>1</AutoLogGrpID>
+				<StartUp>MANUAL</StartUp>
+				<Direction>DeviceAsSource</Direction>
+				<WriteSettings>
+					<WriteMode>APPEND</WriteMode>
+				</WriteSettings>
+				<SamplingSettings>
+					<SamplingMode>onChange</SamplingMode>
+					<SamplingRate>500</SamplingRate>
+				</SamplingSettings>
+				<Database>
+					<DBId>1</DBId>
+					<DBTable Name="dbo.EA">
+						<ID>1</ID>
+						<TableMode>CUSTOM</TableMode>
+						<FailoverTableName>
+						</FailoverTableName>
+						<Columns>
+							<Column Type="4" Mode="MAPPED" SymbolID="1">Par1</Column>
+							<Column Type="4" Mode="MAPPED" SymbolID="2">Par2</Column>
+							<Column Type="2" Mode="MAPPED" SymbolID="3">Par3</Column>
+							<Column Type="2" Mode="MAPPED" SymbolID="4">par4</Column>
+						</Columns>
+					</DBTable>
+				</Database>
+				<Device>
+					<DeviceId>1</DeviceId>
+					<Timeout>2000</Timeout>
+				</Device>
+				<Symbols>
+					<AdsSymbol ID="1" Type="BOOL" IGroup="61472" IOffset="774185" BitSize="8" AllocationName="Par1">EA.Par1</AdsSymbol>
+					<AdsSymbol ID="2" Type="BOOL" IGroup="61488" IOffset="774186" BitSize="8" AllocationName="Par2">EA.Par2</AdsSymbol>
+					<AdsSymbol ID="3" Type="INT" IGroup="61472" IOffset="779036" BitSize="16" AllocationName="Par3">EA.Par3</AdsSymbol>
+					<AdsSymbol ID="4" Type="INT" IGroup="61488" IOffset="779038" BitSize="16" AllocationName="Par4">EA.Par4</AdsSymbol>
+				</Symbols>
+			</AutoLogGroup>
+			<AutoLogGroup Name="Merker">
+				<AutoLogGrpID>2</AutoLogGrpID>
+				<StartUp>MANUAL</StartUp>
+				<Direction>DeviceAsSource</Direction>
+				<WriteSettings>
+					<WriteMode>APPEND</WriteMode>
+				</WriteSettings>
+				<SamplingSettings>
+					<SamplingMode>onChange</SamplingMode>
+					<SamplingRate>500</SamplingRate>
+				</SamplingSettings>
+				<Database>
+					<DBId>1</DBId>
+					<DBTable Name="dbo.Merker">
+						<ID>2</ID>
+						<TableMode>CUSTOM</TableMode>
+						<FailoverTableName>
+						</FailoverTableName>
+						<Columns>
+							<Column Type="4" Mode="MAPPED" SymbolID="1">Par1</Column>
+							<Column Type="2" Mode="MAPPED" SymbolID="2">Par2</Column>
+							<Column Type="1" Mode="MAPPED" SymbolID="3">Par3</Column>
+							<Column Type="7" Mode="MAPPED" SymbolID="4">Par4</Column>
+							<Column Type="6" Mode="MAPPED" SymbolID="5">Par5</Column>
+						</Columns>
+					</DBTable>
+				</Database>
+				<Device>
+					<DeviceId>1</DeviceId>
+					<Timeout>2000</Timeout>
+				</Device>
+				<Symbols>
+					<AdsSymbol ID="1" Type="BOOL" IGroup="16448" IOffset="774187" BitSize="8" AllocationName="Par1">Merker.Par1</AdsSymbol>
+					<AdsSymbol ID="2" Type="INT" IGroup="16448" IOffset="779120" BitSize="16" AllocationName="Par2">Merker.Par2</AdsSymbol>
+					<AdsSymbol ID="3" Type="DINT" IGroup="16448" IOffset="779124" BitSize="32" AllocationName="Par3">Merker.Par3</AdsSymbol>
+					<AdsSymbol ID="4" Type="REAL" IGroup="16448" IOffset="779128" BitSize="32" AllocationName="Par4">Merker.Par4</AdsSymbol>
+					<AdsSymbol ID="5" Type="LREAL" IGroup="16448" IOffset="779136" BitSize="64" AllocationName="Par5">Merker.Par5</AdsSymbol>
+				</Symbols>
+			</AutoLogGroup>
+		</AutoLogGroups>
+	</BaseConfig>
+</Configuration>

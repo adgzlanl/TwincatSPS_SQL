@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ADSDevice>
+  <ID>1</ID>
+  <Name>AdsDevice</Name>
+  <NetID>127.0.0.1.1.1</NetID>
+  <DevicePort>851</DevicePort>
+  <Timeout>2000</Timeout>
+  <ConnectionType>bySymbolName</ConnectionType>
+  <Temporary>False</Temporary>
+</ADSDevice>

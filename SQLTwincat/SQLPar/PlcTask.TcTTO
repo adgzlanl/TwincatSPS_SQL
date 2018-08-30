@@ -7,6 +7,9 @@
     <PouCall>
       <Name>sQLex2</Name>
     </PouCall>
+    <PouCall>
+      <Name>SQLLOG</Name>
+    </PouCall>
     <TaskFBGuid>{89b1b9ec-5101-4166-9298-45c5e14afb4c}</TaskFBGuid>
     <Fb_init>{babfa849-909f-4296-a8d7-d1bfe9228ad1}</Fb_init>
     <Fb_exit>{a61757f6-c956-43a7-bcae-e30cec69170d}</Fb_exit>

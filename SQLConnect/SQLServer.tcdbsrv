@@ -1,21 +1,25 @@
 <?xml version="1.0"?>
 <ServerSettings>
   <TargetNetID>127.0.0.1.1.1</TargetNetID>
-  <LogMode>0</LogMode>
-  <LogPath />
-  <LogMaxLength>0</LogMaxLength>
+  <LogMode>1</LogMode>
+  <LogPath>C:\TwinCAT\Functions\TF6420-Database-Server\Win32\Server</LogPath>
+  <LogMaxLength>10</LogMaxLength>
   <Impersonate>False</Impersonate>
-  <DBNULLAllowed>True</DBNULLAllowed>
+  <DBNULLAllowed>False</DBNULLAllowed>
   <DBCommandTimeout>30</DBCommandTimeout>
   <DBConnectionTimeout>15</DBConnectionTimeout>
   <MaxByteArrayLength>256</MaxByteArrayLength>
   <MaxStringLength>256</MaxStringLength>
-  <WSTRINGSupportActive>True</WSTRINGSupportActive>
+  <WSTRINGSupportActive>False</WSTRINGSupportActive>
   <TcDbSrvProject>
     <tcdbsrvdbCompile Include="SQLServer\TwincatSQL\TwincatSQL.tcdbsrvdb" />
-    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\AutoLogGroup\AutoLogGroup.tcdbsrvauto" />
-    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\AutoLogGroup\AdsDevice.tcdbsrvads" />
-    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\AutoLogGroup\Symbols.tcdbsrvsym" />
-    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\AutoLogGroup\DBTable.tcdbsrvtbl" />
+    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\EA\EA.tcdbsrvauto" />
+    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\Merker\Merker.tcdbsrvauto" />
+    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\EA\AdsDevice.tcdbsrvads" />
+    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\Merker\AdsDevice.tcdbsrvads" />
+    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\EA\Symbols.tcdbsrvsym" />
+    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\Merker\Symbols.tcdbsrvsym" />
+    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\EA\DBTable.tcdbsrvtbl" />
+    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\Merker\DBTable.tcdbsrvtbl" />
   </TcDbSrvProject>
 </ServerSettings>

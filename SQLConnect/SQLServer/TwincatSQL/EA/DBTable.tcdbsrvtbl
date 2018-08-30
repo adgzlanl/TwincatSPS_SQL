@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<Table>
+  <ID>1</ID>
+  <Name>DBTable</Name>
+  <TableName>dbo.EA</TableName>
+  <FailOverTableName />
+  <TableMode>CUSTOM</TableMode>
+  <AdditionalSettings />
+  <Columns>
+    <Column>
+      <Name>Par1</Name>
+      <Type>Bit</Type>
+      <Mode>MAPPED</Mode>
+      <MappedSymbolID>1</MappedSymbolID>
+    </Column>
+    <Column>
+      <Name>Par2</Name>
+      <Type>Bit</Type>
+      <Mode>MAPPED</Mode>
+      <MappedSymbolID>2</MappedSymbolID>
+    </Column>
+    <Column>
+      <Name>Par3</Name>
+      <Type>SmallInt</Type>
+      <Mode>MAPPED</Mode>
+      <MappedSymbolID>3</MappedSymbolID>
+    </Column>
+    <Column>
+      <Name>par4</Name>
+      <Type>SmallInt</Type>
+      <Mode>MAPPED</Mode>
+      <MappedSymbolID>4</MappedSymbolID>
+    </Column>
+  </Columns>
+</Table>

@@ -16,6 +16,38 @@
       <DependentUpon>SQLServer.tcdbsrv</DependentUpon>
     </tcdbsrvdbCompile>
   </ItemGroup>
+  <ItemGroup>
+    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\EA\EA.tcdbsrvauto">
+      <DependentUpon>SQLServer\TwincatSQL\TwincatSQL.tcdbsrvdb</DependentUpon>
+    </tcdbsrvautoCompile>
+    <tcdbsrvautoCompile Include="SQLServer\TwincatSQL\Merker\Merker.tcdbsrvauto">
+      <DependentUpon>SQLServer\TwincatSQL\TwincatSQL.tcdbsrvdb</DependentUpon>
+    </tcdbsrvautoCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\EA\AdsDevice.tcdbsrvads">
+      <DependentUpon>SQLServer\TwincatSQL\EA\EA.tcdbsrvauto</DependentUpon>
+    </tcdbsrvadsCompile>
+    <tcdbsrvadsCompile Include="SQLServer\TwincatSQL\Merker\AdsDevice.tcdbsrvads">
+      <DependentUpon>SQLServer\TwincatSQL\Merker\Merker.tcdbsrvauto</DependentUpon>
+    </tcdbsrvadsCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\EA\Symbols.tcdbsrvsym">
+      <DependentUpon>SQLServer\TwincatSQL\EA\EA.tcdbsrvauto</DependentUpon>
+    </tcdbsrvsymCompile>
+    <tcdbsrvsymCompile Include="SQLServer\TwincatSQL\Merker\Symbols.tcdbsrvsym">
+      <DependentUpon>SQLServer\TwincatSQL\Merker\Merker.tcdbsrvauto</DependentUpon>
+    </tcdbsrvsymCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\EA\DBTable.tcdbsrvtbl">
+      <DependentUpon>SQLServer\TwincatSQL\EA\EA.tcdbsrvauto</DependentUpon>
+    </tcdbsrvtblCompile>
+    <tcdbsrvtblCompile Include="SQLServer\TwincatSQL\Merker\DBTable.tcdbsrvtbl">
+      <DependentUpon>SQLServer\TwincatSQL\Merker\Merker.tcdbsrvauto</DependentUpon>
+    </tcdbsrvtblCompile>
+  </ItemGroup>
   <!-- This next bit is required unless the macro used to Import your targets is defined in an MSBuild toolset. -->
   <ProjectExtensions>
     <ProjectCapabilities>

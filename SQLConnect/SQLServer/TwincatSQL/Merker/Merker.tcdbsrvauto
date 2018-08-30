@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<AutoLogGroup>
+  <ID>2</ID>
+  <Name>Merker</Name>
+  <WriteDirection>DeviceAsSource</WriteDirection>
+  <WriteMode>APPEND</WriteMode>
+  <StartMode>Manual</StartMode>
+  <LogMode>cyclic</LogMode>
+  <RingBuffParameter>0</RingBuffParameter>
+  <CycleTime>500</CycleTime>
+  <DBID>1</DBID>
+  <DBTableID>2</DBTableID>
+  <FailOverDBTableID>0</FailOverDBTableID>
+  <ADSDevID>2</ADSDevID>
+  <SymbolListID>2</SymbolListID>
+  <Temporary>False</Temporary>
+  <Disabled>False</Disabled>
+</AutoLogGroup>
